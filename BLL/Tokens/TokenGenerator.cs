@@ -9,7 +9,6 @@ namespace BLL.Tokens
 {
     public class TokenGenerator : ITokenGenerator
     {
-
         private readonly IConfiguration _configuration;
 
         public TokenGenerator(IConfiguration configuration)

@@ -22,11 +22,11 @@ namespace WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<RSSManagerDbContext>(options =>
+            builder.Services.AddDbContext<RssManagerDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<RSSManagerDbContext>()
+                .AddEntityFrameworkStores<RssManagerDbContext>()
                 .AddDefaultTokenProviders();
 
             builder.Services.AddScoped<IFeedRepository, FeedRepository>();

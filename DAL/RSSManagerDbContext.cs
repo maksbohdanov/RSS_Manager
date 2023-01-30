@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
-    public class RSSManagerDbContext: IdentityDbContext<IdentityUser>
+    public class RssManagerDbContext: IdentityDbContext<IdentityUser>
     {
         public DbSet<News> News { get; set; }
         public DbSet<Feed> Feeds { get; set; }
 
-        public RSSManagerDbContext(DbContextOptions<RSSManagerDbContext> options) : base(options)
+        public RssManagerDbContext(DbContextOptions<RssManagerDbContext> options) : base(options)
         {
 
         }

@@ -6,8 +6,8 @@ namespace DAL.Repositories
 {
     public class NewsRepository: INewsRepository
     {
-        private readonly RSSManagerDbContext _context;
-        public NewsRepository(RSSManagerDbContext context)
+        private readonly RssManagerDbContext _context;
+        public NewsRepository(RssManagerDbContext context)
         {
             _context = context;
         }

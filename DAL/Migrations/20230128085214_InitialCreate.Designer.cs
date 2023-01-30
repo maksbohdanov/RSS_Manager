@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
-    [DbContext(typeof(RSSManagerDbContext))]
+    [DbContext(typeof(RssManagerDbContext))]
     [Migration("20230128085214_InitialCreate")]
     partial class InitialCreate
     {

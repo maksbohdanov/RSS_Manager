@@ -6,8 +6,8 @@ namespace DAL.Repositories
 {
     public class FeedRepository : IFeedRepository
     {
-        private readonly RSSManagerDbContext _context;
-        public FeedRepository(RSSManagerDbContext context)
+        private readonly RssManagerDbContext _context;
+        public FeedRepository(RssManagerDbContext context)
         {
             _context = context;
         }
