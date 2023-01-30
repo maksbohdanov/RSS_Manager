@@ -41,6 +41,8 @@ namespace WebAPI
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IFeedService, FeedService>();
+            //builder.Services.AddScoped<INewsService, NewsService>();
 
             builder.Services.AddScoped<ITokenGenerator, TokenGenerator>();
 
