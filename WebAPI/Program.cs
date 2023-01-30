@@ -1,6 +1,11 @@
 using DAL;
 using DAL.Interfaces;
 using DAL.Repositories;
+using AutoMapper;
+using BLL.Mapping;
+
+
+
 using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI
@@ -17,6 +22,13 @@ namespace WebAPI
             builder.Services.AddScoped<IFeedRepository, FeedRepository>();
             builder.Services.AddScoped<INewsRepository, NewsRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            var mapperConfig = new MapperConfiguration(mc =>
+                 mc.AddProfile(new AutomapperProfile()));
+            var mapper = mapperConfig.CreateMapper();
+            builder.Services.AddSingleton(mapper);
+
+           
 
             builder.Services.AddControllers();
 
