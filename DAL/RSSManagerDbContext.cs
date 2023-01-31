@@ -23,9 +23,27 @@ namespace DAL
                 .HasForeignKey(n => n.FeedId);
 
             builder.Entity<Feed>()
-                .HasOne(f => f.User)
+                .HasMany(f => f.Users)
                 .WithMany()
-                .HasForeignKey(f => f.UserId);
+                .UsingEntity(j => j.ToTable("Subscription"));
+
+            builder.Entity<News>()
+                .HasMany(n => n.Users)
+                .WithMany()
+                .UsingEntity<UserNews>(
+                    j => j
+                     .HasOne(un => un.User)
+                     .WithMany()
+                     .HasForeignKey(un => un.UserId),
+                    j => j
+                     .HasOne(un => un.News)
+                     .WithMany(n => n.UserNews)
+                     .HasForeignKey(un => un.NewsId),
+                    j => 
+                     {
+                         j.HasKey(k => new { k.UserId, k.NewsId });
+                         j.ToTable("UserNews");
+                     });
 
             base.OnModelCreating(builder);
         }

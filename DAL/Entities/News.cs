@@ -1,4 +1,6 @@
-﻿namespace DAL.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace DAL.Entities
 {
     public class News: EntityInfo
     {
@@ -7,5 +9,9 @@
 
         public virtual Feed? Feed { get; set; }
         public int FeedId { get; set; }
+
+        public virtual ICollection<IdentityUser> Users { get; set; } = new HashSet<IdentityUser>();
+        public virtual ICollection<UserNews> UserNews { get; set; } = new HashSet<UserNews>();
+
     }
 }
