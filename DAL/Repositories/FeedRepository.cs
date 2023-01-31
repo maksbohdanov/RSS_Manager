@@ -16,6 +16,7 @@ namespace DAL.Repositories
         {
             return await _context.Feeds
                 .Include(x => x.News)
+                .Include(x => x.Users)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -23,6 +24,7 @@ namespace DAL.Repositories
         {
             return await _context.Feeds
                 .Include(x => x.News)
+                .Include(x => x.Users)
                 .ToListAsync();
         }
 
@@ -45,8 +47,18 @@ namespace DAL.Repositories
 
         public async Task<bool> CreateAsync(Feed entity)
         {
+            var entityExists = await CheckIfExists(entity);
+            if (entityExists)
+                return false;
+
             await _context.AddAsync(entity);
             return true;
+        }
+
+        public async Task<bool> CheckIfExists(Feed entity)
+        {
+            return await _context.Feeds
+                .AnyAsync(x => x.Link == entity.Link && x.Title == entity.Title);
         }
 
         public async Task<bool> DeleteByIdAsync(int id)

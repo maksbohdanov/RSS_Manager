@@ -24,10 +24,10 @@ namespace BLL.Services
             _httpContextAccessor= httpContextAccessor;
         }       
 
-        public async Task<UserDto> RegisterAsync(RegistrationModel registerModel)
+        public async Task<UserDto> RegisterAsync(RegistrationModel registrationModel)
         {
-            var user = _mapper.Map<IdentityUser>(registerModel);
-            var result = await _userManager.CreateAsync(user, registerModel.Password);
+            var user = _mapper.Map<IdentityUser>(registrationModel);
+            var result = await _userManager.CreateAsync(user, registrationModel.Password);
 
             if (!result.Succeeded)
             {
@@ -51,10 +51,10 @@ namespace BLL.Services
             return _tokenGenerator.GenerateToken(user);
         }
 
-        public string? GetCurrentUserId()
+        public async Task<IdentityUser?> GetCurrentUserAsync()
         {
             var principal = _httpContextAccessor.HttpContext.User;
-            return _userManager.GetUserId(principal);
+            return await _userManager.GetUserAsync(principal);            
         }
     }
 }

@@ -13,12 +13,14 @@ namespace BLL.Mapping
                .ReverseMap();
 
             CreateMap<Feed, FeedDto>()
-                //.ForMember(dto => dto.News, x => x.MapFrom(f => f.News.Select(n => n)))
+                .ForMember(dto => dto.News, x => x.MapFrom(f => f.News))
+                .ForMember(dto => dto.UserId, x => x.MapFrom((src, dest, destMember, context) => context.Items["UserId"]))
                 .ReverseMap();
 
-            CreateMap<CodeHollow.FeedReader.Feed, Feed>()
-                 .ForMember(dest => dest.UserId, opt => opt.MapFrom((src, dest, destMember, context) => context.Items["UserId"])); ;
+            CreateMap<CodeHollow.FeedReader.FeedItem, News>();
 
+            CreateMap<CodeHollow.FeedReader.Feed, Feed>()
+                 .ForMember(dest => dest.News, opt => opt.MapFrom(x => x.Items));
 
             CreateMap<RegistrationModel, IdentityUser>();
 
