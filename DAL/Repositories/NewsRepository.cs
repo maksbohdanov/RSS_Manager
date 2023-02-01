@@ -16,6 +16,8 @@ namespace DAL.Repositories
         {
             return await _context.News
                 .Include(x => x.Feed)
+                .Include(x => x.Users)
+                .Include(x => x.UserNews)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -23,6 +25,8 @@ namespace DAL.Repositories
         {
             return await _context.News
                 .Include(x => x.Feed)
+                .Include(x => x.Users)
+                .Include(x => x.UserNews)
                 .ToListAsync();
         }
 

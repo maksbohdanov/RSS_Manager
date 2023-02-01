@@ -12,6 +12,5 @@ namespace DAL.Entities
 
         public virtual ICollection<IdentityUser> Users { get; set; } = new HashSet<IdentityUser>();
         public virtual ICollection<UserNews> UserNews { get; set; } = new HashSet<UserNews>();
-
     }
 }
