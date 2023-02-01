@@ -1,7 +1,6 @@
 using DAL;
 using DAL.Interfaces;
 using DAL.Repositories;
-using AutoMapper;
 using BLL.Mapping;
 using BLL.Interfaces;
 using BLL.Services;
@@ -13,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.OpenApi.Models;
 
 namespace WebAPI
 {
@@ -33,16 +33,14 @@ namespace WebAPI
             builder.Services.AddScoped<INewsRepository, NewsRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            var mapperConfig = new MapperConfiguration(mc =>
-                 mc.AddProfile(new AutomapperProfile()));
-            var mapper = mapperConfig.CreateMapper();
-            builder.Services.AddSingleton(mapper);
+            builder.Services.AddAutoMapper(typeof(AutomapperProfile));
+
 
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IFeedService, FeedService>();
-            //builder.Services.AddScoped<INewsService, NewsService>();
+            builder.Services.AddScoped<INewsService, NewsService>();
 
             builder.Services.AddScoped<ITokenGenerator, TokenGenerator>();
 
@@ -85,7 +83,28 @@ namespace WebAPI
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(s =>
+            {
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "JWT Authentication",
+                    Description = "Enter JWT Bearer token **_only_**",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                s.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {securityScheme, Array.Empty<string>()}
+                });
+            });
 
 
             var app = builder.Build();
@@ -93,7 +112,7 @@ namespace WebAPI
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Social Network API v1"));
             }
 
             app.UseHttpsRedirection();
