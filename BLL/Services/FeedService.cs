@@ -6,6 +6,7 @@ using DAL.Interfaces;
 using BLL.Exceptions;
 using Feed = DAL.Entities.Feed;
 using Microsoft.AspNetCore.Identity;
+using DAL.Entities;
 
 namespace BLL.Services
 {
@@ -46,6 +47,10 @@ namespace BLL.Services
 
             var result = entityCreated ? newFeed : await FindFeedAsync(newFeed);
 
+            if(user != null && result != null)
+            {
+                AddUserToNews(user, result.News);
+            }
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<FeedDto>(result, opt => opt.Items["UserId"] = user?.Id);
@@ -83,6 +88,14 @@ namespace BLL.Services
 
             feed.Users.Add(user);
             await _unitOfWork.Feeds.UpdateAsync(feed);           
+        }
+
+        private void AddUserToNews(IdentityUser user, IEnumerable<News> news)
+        {
+            foreach (var newsItem in news)
+            {
+                newsItem.Users.Add(user);
+            }
         }
     }
 }
