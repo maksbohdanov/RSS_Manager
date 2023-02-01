@@ -1,7 +1,7 @@
 ﻿using BLL.Interfaces;
 using BLL.Models;
-using BLL.Services;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
@@ -27,8 +27,7 @@ namespace WebAPI.Controllers
 
         [HttpPut("read")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(NewsDto))]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorDetails))]
-        //[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDetails))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDetails))]
         public async Task<IActionResult> SetNewsAsRead([FromQuery] string newsId)
         {
             var news = await _newsService.SetNewsAsReadAsync(newsId);

@@ -13,6 +13,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.OpenApi.Models;
+using WebAPI.Middlewares;
 
 namespace WebAPI
 {
@@ -74,6 +75,8 @@ namespace WebAPI
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
             });
 
+            builder.Services.AddTransient<ErrorHandlerMiddleware>();
+
             builder.Services.AddControllers(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder("Bearer").RequireAuthenticatedUser().Build();
@@ -130,7 +133,15 @@ namespace WebAPI
 
             app.UseAuthorization();
 
+            app.UseMiddleware<ErrorHandlerMiddleware>();
+
             app.MapControllers();
+
+            using (var serviceScope = app.Services.CreateAsyncScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<RssManagerDbContext>();
+                context.Database.Migrate();
+            }
 
             app.Run();
         }
