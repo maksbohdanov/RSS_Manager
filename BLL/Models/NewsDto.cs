@@ -8,5 +8,6 @@
         public string Description { get; set; } = string.Empty;
         public DateTime? PublishingDate { get; set; }
         public int FeedId { get; set; }
+        public bool IsRead { get; set; }
     }
 }

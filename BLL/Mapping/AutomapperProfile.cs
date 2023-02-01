@@ -9,12 +9,12 @@ namespace BLL.Mapping
     {
         public AutomapperProfile()
         {
-            CreateMap<News, NewsDto>()
-               .ReverseMap();
+            CreateMap<News, NewsDto>()                
+               .AfterMap<SetFeedReadAction>();
 
             CreateMap<Feed, FeedDto>()
-                .ForMember(dto => dto.News, x => x.MapFrom(f => f.News))
-                .ForMember(dto => dto.UserId, x => x.MapFrom((src, dest, destMember, context) => context.Items["UserId"]))
+                .ForMember(dto => dto.News, opt => opt.MapFrom(src => src.News))
+                .ForMember(dto => dto.UserId, opt => opt.MapFrom((src, dest, destMember, context) => context.Items["UserId"]))
                 .ReverseMap();
 
             CreateMap<CodeHollow.FeedReader.FeedItem, News>();
